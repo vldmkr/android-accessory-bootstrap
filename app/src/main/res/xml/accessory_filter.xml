@@ -2,4 +2,5 @@
 
 <resources>    
 	<usb-accessory model="FTDIGPIODemo" manufacturer="FTDI" version="1.0"/>
+	<usb-accessory model="FTDISPIMasterDemo" manufacturer="FTDI" version="1.0"/>
 </resources>
