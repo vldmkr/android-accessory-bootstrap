@@ -72,19 +72,23 @@ public class FT311GPIOInterface extends AccessoryInterface {
         return VERSION_STRING;
     }
 
-    static byte highMask(byte value, int mask) {
+    public static byte highMask(byte value, int mask) {
         return (byte) (value | mask);
     }
 
-    static byte lowMask(byte value, int mask) {
+    public static byte lowMask(byte value, int mask) {
         return (byte) (value & ~mask);
     }
 
-    static byte high(byte value, int bit) {
+    public static byte high(byte value, int bit) {
         return highMask(value, 1 << bit);
     }
 
-    static byte low(byte value, int bit) {
+    public static byte low(byte value, int bit) {
         return lowMask(value, 1 << bit);
+    }
+
+    public static byte bit(byte value, int bit) {
+        return (byte) ((value >> bit) & 1);
     }
 }

@@ -72,6 +72,7 @@ public class MainActivity extends Activity {
         super.onResume();
         if (mFT311GPIOInterface != null) {
             mFT311GPIOInterface.resume();
+            mFT311GPIOInterface.resetPort();
         }
     }
 

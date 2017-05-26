@@ -148,8 +148,9 @@ public abstract class AccessoryInterface {
                 public void run() {
                     try {
                         if (mInChanel != null) {
-                            mInChanel.read(mInBuffer);
-                            Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_ROW_DATA, mInBuffer.array()).sendToTarget();
+                            final int actuallyRead = mInChanel.read(mInBuffer);
+                            Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_ROW_DATA,
+                                    actuallyRead, 0, mInBuffer.array()).sendToTarget();
                             mInBuffer.clear();
                             mWorkerHandler.post(this);
                         }
@@ -166,6 +167,16 @@ public abstract class AccessoryInterface {
         try {
             if (mOutChanel != null) {
                 mOutChanel.write(ByteBuffer.wrap(data));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void directWrite(byte[] data, int byteOffset, int byteCount) {
+        try {
+            if (mOutputStream != null) {
+                mOutputStream.write(data, byteOffset, byteCount);
             }
         } catch (IOException e) {
             e.printStackTrace();
