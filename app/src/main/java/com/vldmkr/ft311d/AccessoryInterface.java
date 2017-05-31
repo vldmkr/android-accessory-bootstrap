@@ -1,4 +1,4 @@
-package com.vldmkr.FT311D.GPIO;
+package com.vldmkr.ft311d;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -28,6 +28,7 @@ public abstract class AccessoryInterface {
     public static final int MSG_WHAT_ACCESSORY_NOT_CONNECTED = -2;
     public static final int MSG_WHAT_ACCESSORY_DETACHED = -3;
     public static final int MSG_WHAT_ACCESSORY_PERMISSION_NOT_GRANTED = -4;
+    public static final int MSG_WHAT_ACCESSORY_INEQUALITY = -5;
 
     private static final String ACTION_USB_PERMISSION = "com.AccessoryInterface.USB_PERMISSION";
     private boolean mIsPermissionRequestPending = false;
@@ -79,18 +80,21 @@ public abstract class AccessoryInterface {
         mInBuffer = ByteBuffer.allocate(bufferSize);
     }
 
-    public void register(final Context context) {
+    public final void create(final Context context) {
         mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         mPermissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
         context.registerReceiver(mUsbReceiver, new IntentFilter() {{
             addAction(ACTION_USB_PERMISSION);
             addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
         }});
+
+        start();
     }
 
-    public void unregister(final Context context) {
-        close();
+    public final void destroy(final Context context) {
         context.unregisterReceiver(mUsbReceiver);
+
+        close();
     }
 
     protected void callback(Message msg) {
@@ -105,19 +109,25 @@ public abstract class AccessoryInterface {
 
     public abstract String getVersion();
 
-    public void resume() throws RuntimeException {
+    private void start() {
         if (mFileDescriptor == null) {
             final UsbAccessory[] accessories = mUsbManager.getAccessoryList();
             if (accessories != null && accessories[0] != null) {
                 final UsbAccessory accessory = accessories[0];
-                if (!accessory.getManufacturer().equals(getManufacturer())) {
-                    throw new RuntimeException("Manufacturer is not matched!");
+                if (!getManufacturer().equals(accessory.getManufacturer())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Manufacturer is not matched!").sendToTarget();
+                    return;
                 }
-                if (!accessory.getModel().equals(getModel())) {
-                    throw new RuntimeException("Model is not matched!");
+                if (!getModel().equals(accessory.getModel())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Model is not matched!").sendToTarget();
+                    return;
                 }
-                if (!accessory.getVersion().equals(getVersion())) {
-                    throw new RuntimeException("Version is not matched!");
+                if (!getVersion().equals(accessory.getVersion())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Version is not matched!").sendToTarget();
+                    return;
                 }
 
                 if (mUsbManager.hasPermission(accessory)) {
@@ -154,8 +164,7 @@ public abstract class AccessoryInterface {
                             mInBuffer.clear();
                             mWorkerHandler.post(this);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ignored) {
                         mWorkerHandler.removeCallbacks(this);
                     }
                 }
@@ -163,7 +172,7 @@ public abstract class AccessoryInterface {
         }
     }
 
-    protected void write(byte[] data) {
+    protected final void write(byte[] data) {
         try {
             if (mOutChanel != null) {
                 mOutChanel.write(ByteBuffer.wrap(data));
@@ -173,7 +182,7 @@ public abstract class AccessoryInterface {
         }
     }
 
-    protected void directWrite(byte[] data, int byteOffset, int byteCount) {
+    protected final void directWrite(byte[] data, int byteOffset, int byteCount) {
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(data, byteOffset, byteCount);
@@ -183,7 +192,7 @@ public abstract class AccessoryInterface {
         }
     }
 
-    protected void close() {
+    private void close() {
         try {
             if (mFileDescriptor != null) {
                 mFileDescriptor.close();

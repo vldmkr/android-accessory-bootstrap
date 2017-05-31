@@ -1,6 +1,5 @@
-package com.vldmkr.FT311D.GPIO;
+package com.vldmkr.ft311d;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
@@ -12,14 +11,11 @@ public class FT311GPIOInterface extends AccessoryInterface {
     public static final int MSG_WHAT_GPIO_DATA = 1;
 
     private byte mPortState;
-    private final Context mContext;
     private final Handler mCommunicationHandler;
 
-    public FT311GPIOInterface(final Context context, final Handler communicationHandler) {
+    public FT311GPIOInterface(final Handler communicationHandler) {
         super(null, 4);
-        mContext = context;
         mCommunicationHandler = communicationHandler;
-        register(mContext);
     }
 
     public void resetPort() {
@@ -37,11 +33,6 @@ public class FT311GPIOInterface extends AccessoryInterface {
 
     public byte readPort() {
         return mPortState;
-    }
-
-    public void destroy() {
-        resetPort();
-        unregister(mContext);
     }
 
     @Override

@@ -1,6 +1,5 @@
-package com.vldmkr.FT311D.GPIO;
+package com.vldmkr.ft311d;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
@@ -26,14 +25,11 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
     public final int MAX_CLOCK_FREQ = 24000000;
     public final int MAX_BYTES = 255;
 
-    private final Context mContext;
     private final Handler mCommunicationHandler;
 
-    public FT311SPIMasterInterface(final Context context, final Handler communicationHandler) {
+    public FT311SPIMasterInterface(final Handler communicationHandler) {
         super(null, 255);
-        mContext = context;
         mCommunicationHandler = communicationHandler;
-        register(mContext);
     }
 
     public void resetSPI() {
@@ -74,11 +70,6 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
 
             write(buffer);
         }
-    }
-
-    public void destroy() {
-        resetSPI();
-        unregister(mContext);
     }
 
     @Override
