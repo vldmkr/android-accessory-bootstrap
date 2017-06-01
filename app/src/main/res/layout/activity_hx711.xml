@@ -81,10 +81,11 @@
             android:text="Start" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageViewIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="invisible"
             android:src="@drawable/icon" />
 
         <Button

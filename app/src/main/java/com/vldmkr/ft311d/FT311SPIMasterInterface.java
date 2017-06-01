@@ -50,11 +50,11 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
         });
     }
 
-    public void readDataSPI(int count) {
+    public void readDataSPI(int count, byte value) {
         if (count > 0) {
             count = count > MAX_BYTES ? MAX_BYTES : count;
             final byte[] buffer = new byte[count + 1];
-            Arrays.fill(buffer, (byte) 0xff);
+            Arrays.fill(buffer, value);
             buffer[0] = 0x63;
 
             write(buffer);
