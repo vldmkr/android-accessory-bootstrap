@@ -18,8 +18,8 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
     public static final byte DATA_ORDER_MSB = 0;
     public static final byte DATA_ORDER_LSB = 1;
 
-    private static final int SPI_READ_DATA = 0x62;
-    private static final int SPI_WRITE_DATA = 0x63;
+    private static final int SPI_READ_DATA = 0x63;
+    private static final int SPI_WRITE_DATA = 0x62;
 
     public static final int MSG_WHAT_SPI_READ_DATA = SPI_READ_DATA;
     public static final int MSG_WHAT_SPI_WRITE_DATA = SPI_WRITE_DATA;
