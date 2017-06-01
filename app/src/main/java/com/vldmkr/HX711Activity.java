@@ -14,34 +14,25 @@ import com.vldmkr.ft311d.FT311SPIMasterInterface;
 import com.vldmkr.ft311d.bootstrap.R;
 
 public class HX711Activity extends Activity {
-    private final byte[] SPI_HIGH_LEVEL_PACKET = new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-    private final byte[] SPI_LOW_LEVEL_PACKET = new byte[]{0, 0, 0, 0};
     private final int SPI_BYTES_TO_READ = 4;
     private final int SPI_READ_INTERVAL_MS = 200;
-
-    private EditText mValueEditText = null;
-    private EditText mTriggerEditText = null;
-    private View mIconView = null;
 
     private final Handler mSPIMasterHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what == FT311SPIMasterInterface.MSG_WHAT_SPI_WRITE_DATA
-                    || msg.what == FT311SPIMasterInterface.MSG_WHAT_SPI_READ_DATA) {
-                long val = (bytesToLong((byte[]) msg.obj) ^ 0x800000);
-                if (val != 8388607) {
-                    mValueEditText.setText(String.valueOf(val));
+            if (msg.what == FT311SPIMasterInterface.MSG_WHAT_SPI_READ_DATA) {
+                mValueEditText.setText(String.valueOf(getHX711Value((byte[]) msg.obj)));
 
-                    if (mContinuesRead && mReadHandler != null) {
-                        mIconView.setVisibility(isTrigger() ? View.VISIBLE : View.INVISIBLE);
-                        mReadHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mFT311SPIMasterInterface.writeDataSPI(
-                                        isTrigger() ? SPI_HIGH_LEVEL_PACKET : SPI_LOW_LEVEL_PACKET);
-                            }
-                        }, SPI_READ_INTERVAL_MS);
-                    }
+                if (mContinuesRead && mReadHandler != null) {
+                    final boolean triggered = isTriggered();
+                    mIconView.setVisibility(triggered ? View.VISIBLE : View.INVISIBLE);
+                    mReadHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFT311SPIMasterInterface.readDataSPI(SPI_BYTES_TO_READ,
+                                    (byte) (triggered ? 0xFF : 0x00));
+                        }
+                    }, SPI_READ_INTERVAL_MS);
                 }
             } else if (msg.what < AccessoryInterface.MSG_WHAT_ACCESSORY_ROW_DATA) {
                 final String detailed = msg.obj == null ? "" : msg.obj.toString();
@@ -51,20 +42,20 @@ public class HX711Activity extends Activity {
             return true;
         }
     });
+
+    private EditText mValueEditText = null;
+    private EditText mTriggerEditText = null;
+    private View mIconView = null;
+
     private final FT311SPIMasterInterface mFT311SPIMasterInterface = new FT311SPIMasterInterface(mSPIMasterHandler);
     private boolean mContinuesRead = false;
     private Handler mReadHandler;
 
-    public static long bytesToLong(byte[] b) {
-        long result = 0;
-        for (int i = 0; i < 3; i++) {
-            result <<= 8;
-            result |= (b[i] & 0xFF);
-        }
-        return result;
+    private long getHX711Value(byte[] data) {
+        return FT311SPIMasterInterface.shiftInMsb(data, 3) ^ 0x800000;
     }
 
-    private boolean isTrigger() {
+    private boolean isTriggered() {
         if (mValueEditText != null && mTriggerEditText != null) {
             try {
                 final int trigger = Integer.parseInt(mTriggerEditText.getText().toString());
@@ -92,7 +83,7 @@ public class HX711Activity extends Activity {
         findViewById(R.id.buttonRead).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFT311SPIMasterInterface.readDataSPI(SPI_BYTES_TO_READ, (byte) 0);
+                mFT311SPIMasterInterface.readDataSPI(SPI_BYTES_TO_READ, (byte) 0x00);
             }
         });
 
@@ -109,7 +100,7 @@ public class HX711Activity extends Activity {
             @Override
             public void onClick(View v) {
                 mContinuesRead = true;
-                mFT311SPIMasterInterface.readDataSPI(SPI_BYTES_TO_READ, (byte) 0);
+                mFT311SPIMasterInterface.readDataSPI(SPI_BYTES_TO_READ, (byte) 0x00);
             }
         });
 

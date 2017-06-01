@@ -45,9 +45,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="110dp"
         android:layout_toStartOf="@+id/buttonTrigger"
-        android:digits="01"
         android:inputType="numberDecimal"
-        android:maxLength="7"
         android:maxLines="1" />
 
     <TextView
