@@ -87,7 +87,7 @@ public class HX711Activity extends Activity {
 
         mValueEditText = (EditText) findViewById(R.id.editTextValue);
         mTriggerEditText = (EditText) findViewById(R.id.editTextTrigger);
-        mIconView = findViewById(R.id.imageViewIcon);
+        mIconView = findViewById(R.id.imageLed);
 
         findViewById(R.id.buttonRead).setOnClickListener(new View.OnClickListener() {
             @Override

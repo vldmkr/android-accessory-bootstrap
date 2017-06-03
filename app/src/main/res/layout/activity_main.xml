@@ -3,20 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:padding="@dimen/layout_padding">
 
     <Button
         android:id="@+id/buttonToGpio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To GPIO" />
+        android:text="@string/to_gpio" />
 
     <Button
         android:id="@+id/buttonToSpiMaster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To SPI Master" />
+        android:text="@string/to_spi_master" />
 </LinearLayout>

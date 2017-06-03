@@ -3,97 +3,100 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:padding="@dimen/layout_padding">
+
+    <TextView
+        android:id="@+id/labelValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextValue"
+        android:text="@string/label_hx711_value" />
 
     <EditText
         android:id="@+id/editTextValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/labelValue"
+        android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonRead"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:inputType="none"
         android:maxLines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
-        android:text="HX711 Value" />
-
     <Button
         android:id="@+id/buttonRead"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/btn_width"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextValue"
         android:layout_alignParentEnd="true"
-        android:text="Read" />
+        android:text="@string/btn_read" />
+
+    <TextView
+        android:id="@+id/labelTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/editTextValue"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextTrigger"
+        android:text="@string/label_hx711_trigger" />
 
     <EditText
         android:id="@+id/editTextTrigger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="110dp"
+        android:layout_below="@id/labelTrigger"
+        android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonTrigger"
-        android:digits="01"
         android:inputType="numberDecimal"
         android:maxLength="7"
         android:maxLines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="90dp"
-        android:text="HX711 Trigger Value" />
-
     <Button
         android:id="@+id/buttonTrigger"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/btn_width"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextTrigger"
         android:layout_alignParentEnd="true"
-        android:text="Trigger" />
+        android:text="@string/btn_trigger" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="180dp"
-        android:orientation="horizontal">
+        android:layout_below="@id/editTextTrigger"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/layout_padding">
 
         <Button
             android:id="@+id/buttonStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Start" />
+            android:text="@string/btn_start" />
 
         <ImageView
-            android:id="@+id/imageViewIcon"
+            android:id="@+id/imageLed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:visibility="invisible"
-            android:src="@drawable/icon" />
+            android:contentDescription="@string/desc_led"
+            android:src="@drawable/icon"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/buttonStop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Stop" />
+            android:text="@string/btn_stop" />
     </LinearLayout>
 
 </RelativeLayout>

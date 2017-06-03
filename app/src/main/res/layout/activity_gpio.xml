@@ -3,79 +3,89 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:padding="@dimen/layout_padding">
+
+    <TextView
+        android:id="@+id/labelConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:labelFor="@+id/editTextConfig"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:text="@string/label_config_port" />
 
     <EditText
         android:id="@+id/editTextConfig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/labelConfig"
+        android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonConfig"
         android:digits="01"
         android:inputType="numberDecimal"
         android:maxLength="7"
         android:maxLines="1"
-        android:text="1111111" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
-        android:text="Сonfig port" />
+        android:text="@string/config_default" />
 
     <Button
         android:id="@+id/buttonConfig"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/btn_width"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextConfig"
         android:layout_alignParentEnd="true"
-        android:text="Config" />
+        android:text="@string/btn_config" />
 
+    <TextView
+        android:id="@+id/labelWrite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/editTextConfig"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextWrite"
+        android:text="@string/label_write_port" />
 
     <EditText
         android:id="@+id/editTextWrite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="110dp"
+        android:layout_below="@id/labelWrite"
+        android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonWrite"
         android:digits="01"
         android:inputType="numberDecimal"
         android:maxLength="7"
         android:maxLines="1"
-        android:text="1111111" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="90dp"
-        android:text="Write to port" />
+        android:text="@string/port_default" />
 
     <Button
         android:id="@+id/buttonWrite"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/btn_width"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextWrite"
         android:layout_alignParentEnd="true"
-        android:text="Write" />
+        android:text="@string/btn_write" />
+
+    <TextView
+        android:id="@+id/labelRead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/editTextWrite"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextRead"
+        android:text="@string/label_read_port" />
 
     <EditText
         android:id="@+id/editTextRead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="180dp"
+        android:layout_below="@id/labelRead"
+        android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonReset"
         android:digits="01"
         android:focusable="false"
@@ -84,19 +94,11 @@
         android:maxLength="7"
         android:maxLines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="160dp"
-        android:text="Read from port" />
-
     <Button
         android:id="@+id/buttonReset"
-        android:layout_width="100dp"
+        android:layout_width="@dimen/btn_width"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextRead"
         android:layout_alignParentEnd="true"
-        android:text="Reset" />
+        android:text="@string/btn_reset" />
 </RelativeLayout>

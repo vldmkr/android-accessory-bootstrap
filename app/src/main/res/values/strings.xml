@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FT311D Bootstrap</string>
+
+    <string name="to_gpio">To GPIO</string>
+    <string name="to_spi_master">To SPI Master</string>
+
+    <string name="config_default">1111111</string>
+    <string name="port_default">1111111</string>
+    <string name="label_config_port">Сonfig port</string>
+    <string name="label_write_port">Write to port</string>
+    <string name="label_read_port">Read from port</string>
+    <string name="btn_config">Config</string>
+    <string name="btn_write">Write</string>
+    <string name="btn_reset">Reset</string>
+
+    <string name="label_hx711_value">HX711 Value</string>
+    <string name="label_hx711_trigger">HX711 Trigger Value</string>
+    <string name="btn_read">Read</string>
+    <string name="btn_trigger">Trigger</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_stop">Stop</string>
+    <string name="desc_led">LED</string>
 </resources>
