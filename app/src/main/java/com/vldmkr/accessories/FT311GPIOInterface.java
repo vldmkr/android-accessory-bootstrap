@@ -1,4 +1,4 @@
-package com.vldmkr.ft311d;
+package com.vldmkr.accessories;
 
 import android.os.Handler;
 import android.os.Message;

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.vldmkr.ft311d.bootstrap.R;
+import com.vldmkr.accessories.bootstrap.R;
 
 public class MainActivity extends Activity {
 
