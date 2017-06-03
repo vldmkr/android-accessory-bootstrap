@@ -8,7 +8,7 @@ public class FT311GPIOInterface extends AccessoryInterface {
     private static final String MODEL_STRING = "FTDIGPIODemo";
     private static final String VERSION_STRING = "1.0";
 
-    public static final int MSG_WHAT_GPIO_DATA = 1;
+    public static final int MSG_WHAT_GPIO_DATA = 0x13;
 
     private byte mPortState;
     private final Handler mCommunicationHandler;

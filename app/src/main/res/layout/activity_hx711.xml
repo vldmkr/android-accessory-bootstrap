@@ -55,7 +55,6 @@
         android:layout_marginTop="@dimen/view_margin_top"
         android:layout_toStartOf="@+id/buttonTrigger"
         android:inputType="numberDecimal"
-        android:maxLength="7"
         android:maxLines="1" />
 
     <Button
