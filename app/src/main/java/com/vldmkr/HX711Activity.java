@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.vldmkr.accessories.AccessoryInterface;
+import com.vldmkr.accessories.ByteUtils;
 import com.vldmkr.accessories.FT311SPIMasterInterface;
 import com.vldmkr.accessories.bootstrap.R;
 
@@ -52,7 +53,7 @@ public class HX711Activity extends Activity {
     private Handler mReadHandler;
 
     private long getHX711Value(byte[] data) {
-        return FT311SPIMasterInterface.shiftInMsb(data, 3) ^ 0x800000;
+        return ByteUtils.shiftInMsb(data, 3) ^ 0x800000;
     }
 
     private boolean isTriggered() {

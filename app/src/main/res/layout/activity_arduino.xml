@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/layout_padding">
+
+    <TextView
+        android:id="@+id/labelValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextValue"
+        android:text="@string/label_hx711_value" />
+
+    <EditText
+        android:id="@+id/editTextValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/labelValue"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:layout_toStartOf="@+id/imageLed"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="none"
+        android:maxLines="1" />
+
+    <ImageView
+        android:id="@+id/imageLed"
+        android:layout_width="@dimen/btn_width"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextValue"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/desc_led"
+        android:src="@drawable/ic_launcher"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/labelTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/editTextValue"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:labelFor="@+id/editTextTrigger"
+        android:text="@string/label_hx711_trigger" />
+
+    <EditText
+        android:id="@+id/editTextTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/labelTrigger"
+        android:layout_marginTop="@dimen/view_margin_top"
+        android:layout_toStartOf="@+id/buttonTrigger"
+        android:inputType="numberDecimal"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/buttonTrigger"
+        android:layout_width="@dimen/btn_width"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextTrigger"
+        android:layout_alignParentEnd="true"
+        android:text="@string/btn_trigger" />
+
+</RelativeLayout>

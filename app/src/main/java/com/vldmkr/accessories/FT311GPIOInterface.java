@@ -24,11 +24,11 @@ public class FT311GPIOInterface extends AccessoryInterface {
 
     public void configPort(byte configOutMap) {
         final byte configInMap = (byte) ~configOutMap;
-        write(new byte[]{0x11, 0x00, low(configOutMap, 7), low(configInMap, 7)});
+        write(new byte[]{0x11, 0x00, ByteUtils.low(configOutMap, 7), ByteUtils.low(configInMap, 7)});
     }
 
     public void writePort(byte portData) {
-        write(new byte[]{0x13, low(portData, 7), 0x00, 0x00});
+        write(new byte[]{0x13, ByteUtils.low(portData, 7), 0x00, 0x00});
     }
 
     public byte readPort() {
@@ -61,25 +61,5 @@ public class FT311GPIOInterface extends AccessoryInterface {
     @Override
     public String getVersion() {
         return VERSION_STRING;
-    }
-
-    public static byte highMask(byte value, int mask) {
-        return (byte) (value | mask);
-    }
-
-    public static byte lowMask(byte value, int mask) {
-        return (byte) (value & ~mask);
-    }
-
-    public static byte high(byte value, int bit) {
-        return highMask(value, 1 << bit);
-    }
-
-    public static byte low(byte value, int bit) {
-        return lowMask(value, 1 << bit);
-    }
-
-    public static byte bit(byte value, int bit) {
-        return (byte) ((value >> bit) & 1);
     }
 }

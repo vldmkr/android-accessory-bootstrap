@@ -104,24 +104,4 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
     public String getVersion() {
         return VERSION_STRING;
     }
-
-    public static long shiftInMsb(byte[] bytes, int size) {
-        final int BYTES_IN_LONG = Long.SIZE / Byte.SIZE;
-        size = size > BYTES_IN_LONG ? BYTES_IN_LONG : size;
-        long value = 0;
-        for (int i = 0; i < size; i++) {
-            value = (value << Byte.SIZE) | (bytes[i] & 0xff);
-        }
-        return value;
-    }
-
-    public static long shiftInLsb(byte[] bytes, int size) {
-        final int BYTES_IN_LONG = Long.SIZE / Byte.SIZE;
-        size = size > BYTES_IN_LONG ? BYTES_IN_LONG : size;
-        long value = 0;
-        for (int i = 0; i < size; i++) {
-            value |= (bytes[i] & 0xff) << (Byte.SIZE * i);
-        }
-        return value;
-    }
 }

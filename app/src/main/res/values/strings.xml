@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FT311D Bootstrap</string>
+    <string name="app_name">Accessory Bootstrap</string>
 
     <string name="to_gpio">To GPIO</string>
     <string name="to_spi_master">To SPI Master</string>
+    <string name="to_arduino">To Arduino</string>
 
     <string name="config_default">1111111</string>
     <string name="port_default">1111111</string>

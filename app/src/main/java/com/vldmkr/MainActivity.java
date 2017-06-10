@@ -27,5 +27,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this, HX711Activity.class));
             }
         });
+
+        findViewById(R.id.buttonToArduino).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ArduinoHX711Activity.class));
+            }
+        });
     }
 }

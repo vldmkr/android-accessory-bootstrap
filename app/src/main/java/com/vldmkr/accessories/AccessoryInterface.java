@@ -193,6 +193,8 @@ public abstract class AccessoryInterface {
     }
 
     private void close() {
+        mWorkerHandler.removeCallbacksAndMessages(null);
+
         try {
             if (mFileDescriptor != null) {
                 mFileDescriptor.close();
