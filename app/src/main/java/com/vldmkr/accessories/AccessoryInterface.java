@@ -1,6 +1,5 @@
 package com.vldmkr.accessories;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,25 +25,25 @@ import java.util.Locale;
 /**
  * This is an abstract class that implements the basic interaction with
  * the USB device connected as USB host through Android Open Accessory (AOA) protocol.
- *
+ * <p>
  * <p>Not all devices can support accessory mode. Suitable devices can be filtered
- * using a <uses-feature> element in the AndroidManifest.
- *
- * <p>Communication with the application level code is carried out through the {@link Handler}.
- * Posted item will be processed as soon as the message queue will ready to do so.
+ * using an <uses-feature> element in the AndroidManifest.
+ * <p>
+ * <p>Communication with the code on the application level is carried out through the {@link Handler}.
+ * Posted item will be processed as soon as the message queue will be ready to do so.
  * Although this does not guarantee high speed of {@link Message} processing,
  * but it satisfies the requirements.
- *
- * <p>The methods {@link #create} and {@link #destroy} must be called from the antagonistic callbacks
- * of the application's life cycle, such as {@link Activity#onResume} and {@link Activity#onPause},
- * respectively.
- *
+ * <p>
+ * <p>The methods {@link #create} and {@link #destroy} must be called from the appropriate
+ * antagonistic callbacks of the application's life cycle, such as {@link android.app.Activity#onResume}
+ * and {@link android.app.Activity#onPause}.
+ * <p>
  * <p>The methods
  * {@link #getManufacturer},
  * {@link #getModel},
  * {@link #getVersion}
  * are used to identify the USB accessory and must be implemented in the extended class.
- *
+ * <p>
  * <p>The {@link #callback} method requires an override if the extended class does not use
  * a communication {@link Handler}.
  */
@@ -63,6 +62,15 @@ public abstract class AccessoryInterface {
 
     private UsbManager mUsbManager = null;
 
+    /*
+     * There is an bug related to the clean closing of the FileInputStream in the implementation
+     * of the UsbManager. Based on this point, it is a good idea to use a non-blocking IO approach.
+     * Now this is not our problem. Read more here:
+     * https://stackoverflow.com/questions/18583555/android-adk-io-exception-enodev
+     *
+     * Using basic IO is closer to real time, but in general,
+     * NIO delays are not so significant, and they do not break the flow.
+     */
     private ParcelFileDescriptor mFileDescriptor = null;
     private FileInputStream mInputStream = null;
     private FileOutputStream mOutputStream = null;
@@ -94,11 +102,12 @@ public abstract class AccessoryInterface {
     };
 
     /**
-     *
-     * @param communicationHandler
-     * @param bufferSize
+     * @param communicationHandler {@link Handler} involved in the communication with application-level code.
+     *                             If it is null, messages are processed by the internal {@link Handler} and
+     *                             pushed to {@link #callback} as a parameter.
+     * @param bufferSize           Expected data size of the {@link FileInputStream} from the USB device.
      */
-    public AccessoryInterface(final Handler communicationHandler, final int bufferSize) {
+    protected AccessoryInterface(final Handler communicationHandler, final int bufferSize) {
         final HandlerThread workerHandlerThread = new HandlerThread("AccessoryInterface.WorkerHandlerThread");
         workerHandlerThread.start();
         mWorkerHandler = new Handler(workerHandlerThread.getLooper(), new Handler.Callback() {
@@ -114,9 +123,9 @@ public abstract class AccessoryInterface {
 
     /**
      * This method finds and opens an attached USB accessory if the caller has permission
-     * to access the accessory. If not, the corresponding request will be sent.
+     * to access the accessory. Otherwise, the corresponding runtime permission request will be sent.
      *
-     * @param context Context for which the {@link BroadcastReceiver} will be registered.
+     * @param context {@link Context} for which the {@link BroadcastReceiver} will be registered.
      */
     public final void create(final Context context) {
         mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
@@ -140,6 +149,12 @@ public abstract class AccessoryInterface {
         close();
     }
 
+    /**
+     * If communicationHandler param of {@link #AccessoryInterface} is null, messages are
+     * pushed to this callback.
+     *
+     * @param msg {@link Message} received after processing by internal {@link Handler}.
+     */
     protected void callback(Message msg) {
         String logMsg = String.format(Locale.ENGLISH, "default callback; override it; message code: %d", msg.what);
         if (msg.what == MSG_WHAT_ACCESSORY_ROW_DATA) {
@@ -148,10 +163,19 @@ public abstract class AccessoryInterface {
         Log.w(TAG, logMsg);
     }
 
+    /**
+     * @return The implementation must not return null, it is used to identify the USB accessory.
+     */
     public abstract String getManufacturer();
 
+    /**
+     * @return The implementation must not return null, it is used to identify the USB accessory.
+     */
     public abstract String getModel();
 
+    /**
+     * @return The implementation must not return null, it is used to identify the USB accessory.
+     */
     public abstract String getVersion();
 
     private void start() {
@@ -199,6 +223,11 @@ public abstract class AccessoryInterface {
             mOutputStream = new FileOutputStream(fd);
             mOutChanel = mOutputStream.getChannel();
 
+            /*
+             * Using a simple java.lang.Thread gives more speed. But Handler combined
+             * with HandlerThread gives more transparency and flexibility.
+             * In this case, the sacrifice is justified.
+             */
             mWorkerHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -218,6 +247,11 @@ public abstract class AccessoryInterface {
         }
     }
 
+    /**
+     * Send data to the USB device. {@link FileChannel} from the non-blocking IO package is used.
+     *
+     * @param data The data array to send.
+     */
     protected final void write(byte[] data) {
         try {
             if (mOutChanel != null) {
@@ -228,10 +262,18 @@ public abstract class AccessoryInterface {
         }
     }
 
+    /**
+     * Send data to the USB device. Blocking operation. {@link FileOutputStream} is used.
+     *
+     * @param data       The data array to send.
+     * @param byteOffset The offset to the first byte of the data array to be send.
+     * @param byteCount  The maximum number of bytes to send.
+     */
     protected final void directWrite(byte[] data, int byteOffset, int byteCount) {
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(data, byteOffset, byteCount);
+                // flush() is not required. The implementation does nothing.
             }
         } catch (IOException e) {
             e.printStackTrace();
