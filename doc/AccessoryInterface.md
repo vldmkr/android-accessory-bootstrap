@@ -16,9 +16,9 @@
 [java.nio.channels.FileChannel]:      https://developer.android.com/reference/java/nio/channels/FileChannel.html
 [java.io.FileOutputStream]:           https://developer.android.com/reference/java/io/FileOutputStream.html
 
-# Documentation
+## Documentation
 
-## `public abstract class AccessoryInterface`
+#### `public abstract class AccessoryInterface`
 
 This is an abstract class that implements the basic interaction with the USB device connected as USB host through Android Open Accessory (AOA) protocol.
 
@@ -42,7 +42,7 @@ The methods [getManufacturer], [getModel], [getVersion] are used to identify the
 
 The [callback] method requires an override if the extended class does not use a communication [android.os.Handler].
 
-## `protected AccessoryInterface(final Handler communicationHandler, final int bufferSize)`
+#### `protected AccessoryInterface(final Handler communicationHandler, final int bufferSize)`
 
  * **Parameters:**
    * `communicationHandler` — [android.os.Handler] involved in the communication with application-level code.
@@ -52,43 +52,43 @@ The [callback] method requires an override if the extended class does not use a 
      pushed to [callback] as a parameter.
    * `bufferSize` — Expected data size of the [java.io.FileInputStream] from the USB device.
 
-## `public final void create(final Context context)`
+#### `public final void create(final Context context)`
 
 This method finds and opens an attached USB accessory if the caller has permission to access the accessory. Otherwise, the corresponding runtime permission request will be sent.
 
  * **Parameters:** `context` — [android.content.Context] for which the [android.content.BroadcastReceiver] will be registered.
 
-## `public final void destroy(final Context context)`
+#### `public final void destroy(final Context context)`
 
 This method closes the connection with USB accessory if it is attached.
 
  * **Parameters:** `context` — Context, which is accepted in the [create] method.
 
-## `protected void callback(Message msg)`
+#### `protected void callback(Message msg)`
 
 If communicationHandler param of [AccessoryInterface] is null, messages are pushed to this callback.
 
  * **Parameters:** `msg` — [android.os.Message] received after processing by internal [android.os.Handler].
 
-## `public abstract String getManufacturer()`
+#### `public abstract String getManufacturer()`
 
  * **Returns:** The implementation must not return null, it is used to identify the USB accessory.
 
-## `public abstract String getModel()`
+#### `public abstract String getModel()`
 
  * **Returns:** The implementation must not return null, it is used to identify the USB accessory.
 
-## `public abstract String getVersion()`
+#### `public abstract String getVersion()`
 
  * **Returns:** The implementation must not return null, it is used to identify the USB accessory.
 
-## `protected final void write(byte[] data)`
+#### `protected final void write(byte[] data)`
 
 Send data to the USB device. [java.nio.channels.FileChannel] from the non-blocking IO package is used.
 
  * **Parameters:** `data` — The data array to send.
 
-## `protected final void directWrite(byte[] data, int byteOffset, int byteCount)`
+#### `protected final void directWrite(byte[] data, int byteOffset, int byteCount)`
 
 Send data to the USB device. Blocking operation. [java.io.FileOutputStream] is used.
 
