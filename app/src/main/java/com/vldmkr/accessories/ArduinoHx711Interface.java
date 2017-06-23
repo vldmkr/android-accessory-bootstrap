@@ -2,6 +2,8 @@ package com.vldmkr.accessories;
 
 import android.os.Handler;
 
+import com.vldmkr.accessory.AccessoryInterface;
+
 public class ArduinoHx711Interface extends AccessoryInterface {
     private static final String MANUFACTURER_STRING = "Arduino";
     private static final String MODEL_STRING = "HX711";

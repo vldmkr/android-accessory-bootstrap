@@ -17,3 +17,7 @@ android {
         }
     }
 }
+
+dependencies {
+    compile 'com.github.vldmkr:android-accessory-interface:1.0.0'
+}

@@ -3,6 +3,8 @@ package com.vldmkr.accessories;
 import android.os.Handler;
 import android.os.Message;
 
+import com.vldmkr.accessory.AccessoryInterface;
+
 import java.util.Arrays;
 
 public class FT311SPIMasterInterface extends AccessoryInterface {

@@ -3,6 +3,8 @@ package com.vldmkr.accessories;
 import android.os.Handler;
 import android.os.Message;
 
+import com.vldmkr.accessory.AccessoryInterface;
+
 public class FT311GPIOInterface extends AccessoryInterface {
     private static final String MANUFACTURER_STRING = "FTDI";
     private static final String MODEL_STRING = "FTDIGPIODemo";

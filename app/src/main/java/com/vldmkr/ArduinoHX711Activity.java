@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.vldmkr.accessories.AccessoryInterface;
 import com.vldmkr.accessories.ArduinoHx711Interface;
 import com.vldmkr.accessories.ByteUtils;
 import com.vldmkr.accessories.bootstrap.R;
+import com.vldmkr.accessory.AccessoryInterface;
 
 public class ArduinoHX711Activity extends Activity {
     private final Handler mHandler = new Handler(new Handler.Callback() {

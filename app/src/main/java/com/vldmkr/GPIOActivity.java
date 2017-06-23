@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.vldmkr.accessories.AccessoryInterface;
 import com.vldmkr.accessories.FT311GPIOInterface;
 import com.vldmkr.accessories.bootstrap.R;
+import com.vldmkr.accessory.AccessoryInterface;
 
 public class GPIOActivity extends Activity {
     private EditText mReadPortEditText = null;
