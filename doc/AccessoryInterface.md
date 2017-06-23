@@ -1,10 +1,10 @@
-[create]:               /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L130
-[destroy]:              /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L146
-[getManufacturer]:      /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L169
-[getModel]:             /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L174
-[getVersion]:           /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L179
-[callback]:             /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L158
-[AccessoryInterface]:   /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L110
+[create]:               /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L129
+[destroy]:              /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L177
+[getManufacturer]:      /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L200
+[getModel]:             /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L205
+[getVersion]:           /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L210
+[callback]:             /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L189
+[AccessoryInterface]:   /app/src/main/java/com/vldmkr/accessories/AccessoryInterface.java#L109
 
 [android.app.Activity#onResume]:      https://developer.android.com/reference/android/app/Activity.html#onResume()
 [android.app.Activity#onPause]:       https://developer.android.com/reference/android/app/Activity.html#onPause()
@@ -24,7 +24,7 @@ This is an abstract class that implements the basic interaction with the USB dev
 
 
 
-Not all devices can support accessory mode. Suitable devices can be filtered using an <uses-feature> element in the AndroidManifest.
+Not all devices can support accessory mode. Suitable devices can be filtered using an `<uses-feature>` element in the AndroidManifest.
 
 
 
