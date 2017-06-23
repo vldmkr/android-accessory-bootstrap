@@ -58,7 +58,6 @@ public abstract class AccessoryInterface {
 
     private static final String ACTION_USB_PERMISSION = "com.AccessoryInterface.USB_PERMISSION";
     private boolean mIsPermissionRequestPending = false;
-    private PendingIntent mPermissionIntent = null;
 
     private UsbManager mUsbManager = null;
 
@@ -87,7 +86,7 @@ public abstract class AccessoryInterface {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
-                UsbAccessory accessory = intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+                final UsbAccessory accessory = intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
                 if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                     open(accessory);
                 } else {
@@ -129,13 +128,45 @@ public abstract class AccessoryInterface {
      */
     public final void create(final Context context) {
         mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-        mPermissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        final PendingIntent permissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
         context.registerReceiver(mUsbReceiver, new IntentFilter() {{
             addAction(ACTION_USB_PERMISSION);
             addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
         }});
 
-        start();
+        if (mFileDescriptor == null) {
+            final UsbAccessory[] accessories = mUsbManager.getAccessoryList();
+            // in the current implementation of UsbManager there can be at most one attached USB accessory
+            if (accessories != null && accessories[0] != null) {
+                final UsbAccessory accessory = accessories[0];
+                if (!getManufacturer().equals(accessory.getManufacturer())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Manufacturer is not matched!").sendToTarget();
+                    return;
+                }
+                if (!getModel().equals(accessory.getModel())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Model is not matched!").sendToTarget();
+                    return;
+                }
+                if (!getVersion().equals(accessory.getVersion())) {
+                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
+                            "Version is not matched!").sendToTarget();
+                    return;
+                }
+
+                if (mUsbManager.hasPermission(accessory)) {
+                    open(accessory);
+                } else {
+                    if (!mIsPermissionRequestPending) {
+                        mUsbManager.requestPermission(accessory, permissionIntent);
+                        mIsPermissionRequestPending = true;
+                    }
+                }
+            } else {
+                Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_NOT_CONNECTED).sendToTarget();
+            }
+        }
     }
 
     /**
@@ -177,42 +208,6 @@ public abstract class AccessoryInterface {
      * @return The implementation must not return null, it is used to identify the USB accessory.
      */
     public abstract String getVersion();
-
-    private void start() {
-        if (mFileDescriptor == null) {
-            final UsbAccessory[] accessories = mUsbManager.getAccessoryList();
-            // in the current implementation of UsbManager there can be at most one attached USB accessory
-            if (accessories != null && accessories[0] != null) {
-                final UsbAccessory accessory = accessories[0];
-                if (!getManufacturer().equals(accessory.getManufacturer())) {
-                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
-                            "Manufacturer is not matched!").sendToTarget();
-                    return;
-                }
-                if (!getModel().equals(accessory.getModel())) {
-                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
-                            "Model is not matched!").sendToTarget();
-                    return;
-                }
-                if (!getVersion().equals(accessory.getVersion())) {
-                    Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_INEQUALITY,
-                            "Version is not matched!").sendToTarget();
-                    return;
-                }
-
-                if (mUsbManager.hasPermission(accessory)) {
-                    open(accessory);
-                } else {
-                    if (!mIsPermissionRequestPending) {
-                        mUsbManager.requestPermission(accessory, mPermissionIntent);
-                        mIsPermissionRequestPending = true;
-                    }
-                }
-            } else {
-                Message.obtain(mCommunicationHandler, MSG_WHAT_ACCESSORY_NOT_CONNECTED).sendToTarget();
-            }
-        }
-    }
 
     private void open(final UsbAccessory accessory) {
         mFileDescriptor = mUsbManager.openAccessory(accessory);
