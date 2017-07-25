@@ -7,6 +7,14 @@ import com.vldmkr.accessory.AccessoryInterface;
 
 import java.util.Arrays;
 
+/**
+ * The implementation of the {@link AccessoryInterface} to work with FT311 chip in SPIMaster mode.
+ * [CNFG0 = 1, CNFG1 = 0, CNFG2 = 1]
+ *
+ * MANUFACTURER_STRING, MODEL_STRING, VERSION_STRING are the strings that determine the device.
+ * These strings are configurable with a Windows utility FT311Configuration.exe
+ * Current implementation contains their default values.
+ */
 public class FT311SPIMasterInterface extends AccessoryInterface {
     private static final String MANUFACTURER_STRING = "FTDI";
     private static final String MODEL_STRING = "FTDISPIMasterDemo";
@@ -32,6 +40,14 @@ public class FT311SPIMasterInterface extends AccessoryInterface {
 
     private final Handler mCommunicationHandler;
 
+    /**
+     * The messages require additional processing and we will not post it upper in the raw format.
+     * We will use internal {@link Handler} of the {@link AccessoryInterface} to process the raw messages.
+     * To achieve this we need to override the {@link #callback(Message)} method.
+     * The communication {@link Handler} of the superclass must be null.
+     *
+     * @param communicationHandler {@link Handler} involved in the communication with application-level code.
+     */
     public FT311SPIMasterInterface(final Handler communicationHandler) {
         super(null, 255);
         mCommunicationHandler = communicationHandler;
